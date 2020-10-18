@@ -14,7 +14,7 @@ def audio_interpreter(update, context):
     try:
         voice = context.bot.getFile(update.message.reply_to_message.voice)
     except:
-        update.message.reply_text("Opa, acho q não entendi seu pedido")
+        update.message.reply_text("Não compreendi seu pedido, poderia repeti-lo?")
         return ConversationHandler.END
 
     wav = convert_ogg_to_wav(voice)
@@ -25,7 +25,7 @@ def audio_interpreter(update, context):
         try:
             text = recognizer.recognize_google(audio, language= 'pt-BR')
         except:
-            text = "Opa, acho q não entendi seu pedido"
+            text = "Não compreendi seu pedido, poderia repeti-lo?"
 
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
 
