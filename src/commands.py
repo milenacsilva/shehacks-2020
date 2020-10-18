@@ -20,7 +20,7 @@ def fetch_location(update, context):
     user_id = str(update.effective_user.id) 
 
     if user_id not in user_data.keys():
-        update.message.send_message("Você ainda não está cadastrado(a)")
+        update.message.reply_text("Você ainda não está cadastrado(a)")
         return ConversationHandler.END 
    
     user_data[user_id]['current_location'] = dict()
