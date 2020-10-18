@@ -8,7 +8,7 @@ def get_current_location(update, context):
     keyboard = [[KeyboardButton(text=text, request_location=True)]]
 
     reply_markup = ReplyKeyboardMarkup(keyboard, one_time_keyboard=True)
-    update.message.reply_text("Informe o endereço de entrega", reply_markup=reply_markup)
+    update.message.reply_text("Informe o endereço de entrega:", reply_markup=reply_markup)
 
     return FETCH_LOCATION
 
@@ -31,7 +31,7 @@ def fetch_location(update, context):
     
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text("Endereço de entrega salvo", reply_markup=ReplyKeyboardRemove())
-    update.message.reply_text("Escolha seu pedido", reply_markup=reply_markup)
+    update.message.reply_text("Escolha seu pedido:", reply_markup=reply_markup)
     return HELP_ME
 
 def get_help_option(update, context):
@@ -51,7 +51,7 @@ def _send_help_message_to_registered_contacts(update, context, help_option):
     name = update.effective_user.first_name
     username = update.effective_user.username 
     
-    text = [f"<a href='https://t.me/{username}'> {name.title()} </a> está em situaçãode risco e precisa de sua ajuda", help_option]
+    text = [f"<a href='https://t.me/{username}'> {name.title()} </a> está em situação de risco e precisa de sua ajuda", help_option]
     for contact in user_data['help_contacts']:   
         try:
             context.bot.send_message(
@@ -72,9 +72,9 @@ def help_me(update, context):
     help_option = user_data['help_option']
 
     if help_option == '1':
-        text = "Por favor, vá a localização atual"
+        text = "Por favor, vá à localização atual"
     elif help_option == '2':
-        text = "Por favor, chame a as autoridades"
+        text = "Por favor, chame as autoridades"
     elif help_option == '3':
         text = "Ligue para o Disque Direitos Humanos"
     

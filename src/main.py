@@ -12,7 +12,7 @@ from getdata import write_JSON, USERS
 CPF, EMAIL, ADDRESS, HELP_CONTACTS = range(4)
 
 def start(update, context):
-    update.message.reply_text("Bem vindo a pizzaria")
+    update.message.reply_text("Bem-vindo(a) à Pizzaria Hortênsia!")
 
 def main():
     updater = Updater(token=TOKEN, use_context=True)
