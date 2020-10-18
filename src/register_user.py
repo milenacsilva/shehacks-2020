@@ -67,7 +67,7 @@ def get_address(update, context):
     keyboard = [[InlineKeyboardButton("Concluir registro", callback_data='finish')]]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.message.reply_text("Envie-nos os contatos nos quais mais confia, pois eles irão te socorrer quando preciso. Assim que terminar, clique no botão a seguir", reply_markup=reply_markup)
+    update.message.reply_text("Envie-nos contatos para saber das promoções! Assim que terminar, clique no botão a seguir", reply_markup=reply_markup)
 
     return HELP_CONTACTS
 
