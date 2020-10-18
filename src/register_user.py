@@ -54,7 +54,7 @@ def get_email(update, context):
     user_id = str(update.effective_user.id)
     user_data[user_id]['email'] = update.message.text
 
-    update.message.reply_text("Endereço onde geralmente ocorrem os delitos?") 
+    update.message.reply_text("Endereço de entrega?") 
 
     return ADDRESS
 
