@@ -38,7 +38,7 @@ def register(update, context):
 
         return ConversationHandler.END
     
-    text.append(f"Olá {update.effective_user.username}, sabemos que está em uma situação difícil e por isso vamos te ajudar. Nos informe os seguintes dados, por favor:") #TODO
+    text.append(f"Olá, {update.effective_user.username}, sabemos que está em uma situação difícil e por isso iremos te ajudar. Informe-nos os seguintes dados, por favor:") #TODO
     text.append("CPF:") #TODO
     update.message.reply_text("\n".join(text))
     
@@ -67,7 +67,7 @@ def get_address(update, context):
     user_id = str(update.effective_user.id)
     user_data[user_id]['address'] = update.message.text
 
-    update.message.reply_text("Nos envie os seus contatos que você mais confia, pois eles irão te socorrer quando preciso. Assim que terminar, digite /concluir")
+    update.message.reply_text("Envie-nos os contatos nos quais mais confia, pois eles irão te socorrer quando preciso. Assim que terminar, digite /concluir")
 
     return HELP_CONTACTS
 
@@ -78,7 +78,7 @@ def get_help_contacts(update, context):
     if new_contact:
         user_data[user_id]['help_contact_list'].append(new_contact)
     else:
-        update.message.reply_text("Por favor, nos informe um contato que está salvo em seu celular.") #TODO
+        update.message.reply_text("Por favor, informe-nos um contato que está salvo em seu celular.") #TODO
     
     return HELP_CONTACTS
 
@@ -104,7 +104,7 @@ def edit(update, context):
                 [InlineKeyboardButton("Lista de Contatos", callback_data='4')]]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    update.message.reply_text("O quê você deseja editar", reply_markup=reply_markup)
+    update.message.reply_text("O que você deseja editar?", reply_markup=reply_markup)
 
     return GET_NEW_INFO 
 
@@ -112,7 +112,7 @@ def get_new_info(update, context):
     query = update.callback_query
     query.answer()
 
-    query.edit_message_text(f"Me mando o novo f{query.data}")
+    query.edit_message_text(f"Mande o novo f{query.data}")
     context.bot_data['query_data'] = [query.data,]    
    
     return UPDATE_INFO
