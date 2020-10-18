@@ -21,9 +21,11 @@ def fetch_location(update, context):
     context.user_data[user_id].current_location = location 
 
 
-    keyboard = [[InlineKeyboardButton("Pizza aiuto", callback_data='1')],
+    keyboard = [
+                [InlineKeyboardButton("Pizza aiuto", callback_data='1')],
                 [InlineKeyboardButton("Pizza pericollo", callback_data='2')],
-                [InlineKeyboardButton("Pizza minaccia", callback_data='3')]]
+                [InlineKeyboardButton("Pizza minaccia", callback_data='3')]
+                ]
     
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text("Endereço de entrega salvo", reply_markup=ReplyKeyboardRemove())
