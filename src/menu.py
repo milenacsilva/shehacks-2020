@@ -3,7 +3,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, CallbackQueryH
 
 # Função que mostrará o cardápio verdadeiro junto a um botão
 # Quando pressionado, o cardápio mudará para o falso
-def cardapio(update, context):
+def menu(update, context):
     keyboard = [[InlineKeyboardButton(text="Clique aqui quando estiver pronto(a) para pedir!", callback_data='help')]]
     markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
     prompt = "Este é o nosso cardápio:"

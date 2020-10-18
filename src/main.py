@@ -2,9 +2,9 @@ from telegram import KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters, CallbackQueryHandler
 from env import TOKEN
 import logging
-from delete import cardapio, query_handler
+from menu import menu, query_handler
 from register_user import registration, edit_info, user_data
-from commands import display_menu, get_help
+from commands import get_help
 from getdata import write_JSON, USERS
 
 # logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
@@ -20,10 +20,9 @@ def main():
 
     dp.add_handler(CommandHandler("start", start))
     # dp.add_handler(MessageHandler(Filters.location, fetch_location))
-    dp.add_handler(CommandHandler("cardapio", cardapio))
+    dp.add_handler(CommandHandler("menu", menu))
     dp.add_handler(CallbackQueryHandler(query_handler))
     dp.add_handler(registration)
-    dp.add_handler(display_menu)
     dp.add_handler(get_help)
     # dp.add_handler(voice_recognition)
     dp.add_handler(edit_info)

@@ -81,15 +81,6 @@ def help_me(update, context):
     _send_help_message_to_registered_contacts(update, context, text)
 
     return ConversationHandler.END
-    
-def menu(update, context):
-    help_menu = "./static/help_menu.png"
-
-    bot_message = context.bot.send_photo(
-        chat_id = update.message.chat_id,
-        photo = open(file=help_menu, mode="rb")
-    )
-    #TODO: fazer com q o bot edite a foto do help menu para o fake menu
 
 get_help = ConversationHandler(
     entry_points = [CommandHandler("teste", get_current_location)],
@@ -98,5 +89,3 @@ get_help = ConversationHandler(
         HELP_ME: [CallbackQueryHandler(get_help_option)]
     },
     fallbacks=[])
-
-display_menu = CommandHandler("menu", menu)
