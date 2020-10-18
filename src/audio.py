@@ -2,7 +2,6 @@ from telegram.ext import MessageHandler, ConversationHandler, Filters, CommandHa
 import speech_recognition as sr
 import subprocess
 
-
 def convert_ogg_to_wav(audio):
     dot_ogg = './static/audio.ogg'
     dot_wav = './static/audio.wav'

@@ -1,45 +1,20 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters, CallbackQueryHandler
-
+from getdata import read_JSON, USERS
 CPF, EMAIL, ADDRESS, HELP_CONTACTS = range(4)
 GET_NEW_INFO, UPDATE_INFO = range(2)
 
-class User():
-    ''' Represents a user of the app '''
-    def __init__(self, username):
-        self.username = username
-        self.cpf = None
-        self.email = None
-        self.address = None
-        self.help_contacts = list()
-        self.current_location = None
-        self.help_option = None
 
-    def set_current_location(self, location):
-        self.current_location = location
-
-    def set_help_option(self, help_option):
-        self.help_option = help_option
-    
-    def set_cpf(self, cpf):
-        self.cpf = cpf
-    
-    def set_email(self, email):
-        self.email = email
-    
-    def set_address(self, address):
-        self.address = address
-    
-    def add_help_contact(self, new_contact):
-        self.help_contacts.append(new_contact)
-
+user_data = read_JSON(USERS)
 def __register_user(update, context):
     ''' Private function to help register a new user '''
-    user_id = update.message.from_user.id
+    user_id = str(str(update.effective_user.id))
     username = update.message.from_user.username
 
-    if user_id not in context.user_data.keys():
-        context.user_data[user_id] = User(username)
+    if user_id not in user_data.keys():
+        user_data[user_id] = dict()
+        user_data[user_id]['username'] = username
+        user_data[user_id]['help_contact_list'] = list()
         return True
 
     return False
@@ -71,8 +46,8 @@ def register(update, context):
 
 def get_cpf(update, context):
     ''' Follow-up command, gets the cpf of the user '''
-    user_id = update.effective_user.id
-    context.user_data[user_id].cpf = update.message.text
+    user_id = str(update.effective_user.id)
+    user_data[user_id]['cpf'] = update.message.text
 
     update.message.reply_text("E-mail usual:") #TODO    
 
@@ -80,8 +55,8 @@ def get_cpf(update, context):
 
 def get_email(update, context):
     ''' Gets the user email '''
-    user_id = update.effective_user.id
-    context.user_data[user_id].email = update.message.text
+    user_id = str(update.effective_user.id)
+    user_data[user_id]['email'] = update.message.text
 
     update.message.reply_text("Endereço onde geralmente ocorrem os delitos:") #TODO
 
@@ -89,8 +64,8 @@ def get_email(update, context):
 
 def get_address(update, context):
     ''' Gets the user address '''
-    user_id = update.effective_user.id
-    context.user_data[user_id].address = update.message.text
+    user_id = str(update.effective_user.id)
+    user_data[user_id]['address'] = update.message.text
 
     update.message.reply_text("Nos envie os seus contatos que você mais confia, pois eles irão te socorrer quando preciso. Assim que terminar, digite /concluir")
 
@@ -98,10 +73,10 @@ def get_address(update, context):
 
 def get_help_contacts(update, context):
     ''' Get all the help contacts from the user '''
-    user_id = update.effective_user.id 
+    user_id = str(update.effective_user.id) 
     new_contact = update.message.contact
     if new_contact:
-        context.user_data[user_id].help_contacts.append(new_contact)
+        user_data[user_id]['help_contact_list'].append(new_contact)
     else:
         update.message.reply_text("Por favor, nos informe um contato que está salvo em seu celular.") #TODO
     
@@ -116,8 +91,7 @@ def conclude_registration(update, context):
     return ConversationHandler.END
 
 def edit(update, context):
-    user_id = update.effective_user.id
-    user_data = context.user_data
+    user_id = str(update.effective_user.id)
 
     if user_id not in user_data.keys():
         update.message.reply_text("Você ainda não está cadastrada. Vamos lá?")
@@ -144,26 +118,25 @@ def get_new_info(update, context):
     return UPDATE_INFO
 
 def update_info(update, context):
-    user_id = update.effective_user.id
-    user_data = context.user_data
+    user_id = str(update.effective_user.id)
     info_to_update = context.bot_data['query_data'].pop(0)
 
     if info_to_update == '1':
         new_info = update.message.text
-        user_data[user_id].set_cpf(new_info)
+        user_data[user_id]['cpf'] = new_info
     elif info_to_update == '2':
         new_info = update.message.text
-        user_data[user_id].set_email(new_info)
+        user_data[user_id]['email'] = new_info
     elif info_to_update == '3':
         new_info = update.message.text
-        user_data[user_id].set_address(new_info)
+        user_data[user_id]['address'] = new_info
     elif info_to_update == '4':
         new_info = update.message.contact
         if not new_info:
             update.message.reply_text("Mande um novo contato válido")
             return UPDATE_INFO
     
-        user_data[user_id].add_help_contact(new_info)
+        user_data[user_id]['help_contact_list'].append(new_info)
 
     update.message.reply_text("Informação atualizada com sucesso")
     return ConversationHandler.END

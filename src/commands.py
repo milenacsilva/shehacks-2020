@@ -1,7 +1,6 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters, Handler, CallbackQueryHandler
 
-from register_user import User
 
 FETCH_LOCATION, HELP_ME = range(2)
 def get_current_location(update, context):
@@ -15,10 +14,13 @@ def get_current_location(update, context):
 
 def fetch_location(update, context):
     location = update.message.location
-    user_id = update.effective_user.id
-    # TODO: Arrumar exceção 
-    # if user_id not in context.user_data.keys() 
-    context.user_data[user_id].current_location = location 
+    user_data = context.user_data
+
+    if not user_data:
+        update.message.send_message("Você ainda não está cadastrada")
+        return ConversationHandler.END 
+   
+    user_data['current_location'] = location 
 
 
     keyboard = [
@@ -34,27 +36,23 @@ def fetch_location(update, context):
 
 def get_help_option(update, context):
     query = update.callback_query
-    user_id = update.effective_user.id
+    user_data = context.user_data
 
     query.answer()
 
-    context.user_data[user_id].set_help_option(query.data)
+    user_data['help_option'] = query.data
     query.edit_message_text("Pedido realizado")
 
     return help_me(update, context)
 
-def __send_help_message_to_registered_contacts(update, context, help_option):
+def _send_help_message_to_registered_contacts(update, context, help_option):
     ''' Base function for all others help commands '''
-    user_id = update.effective_user.id
+    user_data = context.user_data
     name = update.effective_user.first_name
-    username = update.effective_user.username
-    location = context.user_data[user_id].current_location
-    help_contacts = context.user_data[user_id].help_contacts 
-    print(location)
-
+    username = update.effective_user.username 
+    
     text = [f"<a href='https://t.me/{username}'> {name.title()} </a> está em situaçãode risco e precisa de sua ajuda", help_option]
-    for contact in help_contacts:   
-        print(contact)
+    for contact in user_data['help_contacts']:   
         try:
             context.bot.send_message(
                 chat_id = contact.user_id,
@@ -63,15 +61,15 @@ def __send_help_message_to_registered_contacts(update, context, help_option):
             )
             context.bot.send_location(
                 chat_id = contact.user_id,
-                latitude = location.latitude,
-                longitude = location.longitude
+                latitude = user_data['current_location'].latitude,
+                longitude = user_data['current_location'].longitude
             )
         except:
             print("Num mandei")
 
 def help_me(update, context):
-    user_id = update.effective_user.id
-    help_option = context.user_data[user_id].help_option
+    user_data = context.user_data
+    help_option = user_data['help_option']
 
     if help_option == '1':
         text = "Por favor, vá a localização atual"
@@ -80,7 +78,7 @@ def help_me(update, context):
     elif help_option == '3':
         text = "Ligue para o Disque Direitos Humanos"
     
-    __send_help_message_to_registered_contacts(update, context, text)
+    _send_help_message_to_registered_contacts(update, context, text)
 
     return ConversationHandler.END
     
