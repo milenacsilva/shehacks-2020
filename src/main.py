@@ -1,5 +1,5 @@
-from telegram import KeyboardButton, ReplyKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters, CallbackQueryHandler
+from telegram.ext import Updater, CommandHandler
+from telegram import ParseMode
 from env import TOKEN
 import logging
 from menu import display_real_menu, swap_menu
@@ -9,7 +9,21 @@ from utils import write_JSON, USERS
 
 
 def start(update, context):
-    update.message.reply_text("Bem-vindo(a) à Pizzaria Hortênsia!")
+    welcome_text = "Bem-vindo(a) à Pizzaria Hortênsia! 🍕🌺"
+    update.message.reply_text(welcome_text)
+    commands = [
+        "/start - Manda a lista de comandos",
+        "/register - Torne-se um cliente 💻",
+        "/menu - Veja nosso cardápio 📑",
+        "/pedido - Faça um pedido com a gente 🍽",
+        "/edit - Configurações de cliente 🔧"
+    ]
+
+    context.bot.send_message(
+        chat_id = update.message.chat_id,
+        text = "\n".join(commands),
+        parse_mode='HTML')
+
 
 def main():
     updater = Updater(token=TOKEN, use_context=True)
@@ -21,6 +35,7 @@ def main():
     dp.add_handler(get_help)
     dp.add_handler(registration)
     dp.add_handler(edit_info)
+
 
     updater.start_polling()
     print("++++++ STARTING BOT ++++++")
