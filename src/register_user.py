@@ -84,7 +84,7 @@ def get_help_contacts(update, context):
 
 def conclude_registration(update, context):
     ''' Finishs the registration conversation '''
-    update.message.reply_text("Agora estamos com você. Use os seguintes comandos quando precisar ser socorrida:")
+    update.message.reply_text("Agora estamos com você. Use os seguintes comandos quando precisar ser socorrido(a):")
     
     # BOTAR A LISTA DE COMANDO AQ TODO
     
