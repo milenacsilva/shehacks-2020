@@ -9,13 +9,14 @@ def menu(update, context):
     prompt = "Este é o nosso cardápio:"
     photo = "./static/help_menu.png"
     context.bot.send_message(chat_id=update.effective_chat.id, text=prompt)
-    global text_id # Guardando a mensagem com a foto para exclusão
     text_id = context.bot.sendPhoto(chat_id=update.effective_chat.id, photo=open(photo, 'rb'), reply_markup=markup)
+    context.bot_data['text_id'] = text_id # Guardando para exclusão posterior da imagem
 
 def query_handler(update, context):
     query = update.callback_query
     query.answer()
     if query.data == 'help':
+        text_id = context.bot_data['text_id']
         context.bot.edit_message_reply_markup(chat_id=query.message.chat_id, message_id=query.message.message_id) # Deletando o botão
         context.bot.delete_message(chat_id=update.effective_chat.id, message_id=text_id.message_id) # Deletando o cardápio verdadeiro
         media = "./static/fake_menu.png"
