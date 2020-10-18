@@ -112,7 +112,7 @@ def get_new_info(update, context):
     query = update.callback_query
     query.answer()
 
-    query.edit_message_text(f"Mande o novo f{query.data}")
+    query.edit_message_text(f"Envie o novo f{query.data}")
     context.bot_data['query_data'] = [query.data,]    
    
     return UPDATE_INFO
@@ -133,7 +133,7 @@ def update_info(update, context):
     elif info_to_update == '4':
         new_info = update.message.contact
         if not new_info:
-            update.message.reply_text("Mande um novo contato válido")
+            update.message.reply_text("Envie um novo contato válido")
             return UPDATE_INFO
     
         user_data[user_id]['help_contact_list'].append(new_info)

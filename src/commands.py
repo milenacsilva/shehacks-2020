@@ -17,7 +17,7 @@ def fetch_location(update, context):
     user_data = context.user_data
 
     if not user_data:
-        update.message.send_message("Você ainda não está cadastrada")
+        update.message.send_message("Você ainda não está cadastrado(a)")
         return ConversationHandler.END 
    
     user_data['current_location'] = location 
