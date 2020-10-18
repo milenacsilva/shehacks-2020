@@ -1,8 +1,11 @@
 from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, InlineKeyboardButton, InlineKeyboardMarkup, ParseMode
 from telegram.ext import Updater, CommandHandler, ConversationHandler, MessageHandler, Filters, Handler, CallbackQueryHandler
+from register_user import user_data
 
 
 FETCH_LOCATION, HELP_ME = range(2)
+AUITO, PERICOLO, MINACCIA = range(3)
+
 def get_current_location(update, context):
     text = "Clique aqui para confirmar endereço de entrega"
     keyboard = [[KeyboardButton(text=text, request_location=True)]]
@@ -14,19 +17,17 @@ def get_current_location(update, context):
 
 def fetch_location(update, context):
     location = update.message.location
-    user_data = context.user_data
+    user_id = str(update.effective_user.id) 
 
-    if not user_data:
+    if user_id not in user_data.keys():
         update.message.send_message("Você ainda não está cadastrado(a)")
         return ConversationHandler.END 
    
-    user_data['current_location'] = location 
-
-
+    user_data[user_id]['current_location'] = location 
     keyboard = [
-                [InlineKeyboardButton("Pizza aiuto", callback_data='1')],
-                [InlineKeyboardButton("Pizza pericollo", callback_data='2')],
-                [InlineKeyboardButton("Pizza minaccia", callback_data='3')]
+                [InlineKeyboardButton("Pizza aiuto", callback_data=AUITO)],
+                [InlineKeyboardButton("Pizza pericollo", callback_data=PERICOLO)],
+                [InlineKeyboardButton("Pizza minaccia", callback_data=MINACCIA)]
                 ]
     
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -36,23 +37,24 @@ def fetch_location(update, context):
 
 def get_help_option(update, context):
     query = update.callback_query
-    user_data = context.user_data
+    user_id = str(update.effective_user.id)
 
     query.answer()
 
-    user_data['help_option'] = query.data
+    user_data[user_id]['help_option'] = query.data
     query.edit_message_text("Pedido realizado")
 
     return help_me(update, context)
 
-def _send_help_message_to_registered_contacts(update, context, help_option):
+def _send_help_message_to_registered_contacts(update, context, help_text):
     ''' Base function for all others help commands '''
     user_data = context.user_data
     name = update.effective_user.first_name
+    user_id = str(update.effective_user.id)
     username = update.effective_user.username 
     
-    text = [f"<a href='https://t.me/{username}'> {name.title()} </a> está em situação de risco e precisa de sua ajuda", help_option]
-    for contact in user_data['help_contacts']:   
+    text = [f"<a href='https://t.me/{username}'> {name.title()} </a> está em situação de risco e precisa de sua ajuda", help_text]
+    for contact in user_data[user_id]['help_contacts']:   
         try:
             context.bot.send_message(
                 chat_id = contact.user_id,
@@ -61,24 +63,25 @@ def _send_help_message_to_registered_contacts(update, context, help_option):
             )
             context.bot.send_location(
                 chat_id = contact.user_id,
-                latitude = user_data['current_location'].latitude,
-                longitude = user_data['current_location'].longitude
+                latitude = user_data[user_id]['current_location'].latitude,
+                longitude = user_data[user_id]['current_location'].longitude
             )
         except:
-            print("Num mandei")
+            pass
 
 def help_me(update, context):
     user_data = context.user_data
-    help_option = user_data['help_option']
+    user_id = str(update.effective_user.id)
+    help_option = user_data[user_id]['help_option']
 
-    if help_option == '1':
-        text = "Por favor, vá à localização atual"
-    elif help_option == '2':
-        text = "Por favor, chame as autoridades"
-    elif help_option == '3':
-        text = "Ligue para o Disque Direitos Humanos"
+    if help_option == AUITO:
+        help_text = "Por favor, vá à localização atual"
+    elif help_option == PERICOLO:
+        help_text = "Por favor, chame as autoridades"
+    elif help_option == MINACCIA:
+        help_text = "Ligue para o Disque Direitos Humanos"
     
-    _send_help_message_to_registered_contacts(update, context, text)
+    _send_help_message_to_registered_contacts(update, context, help_text)
 
     return ConversationHandler.END
 

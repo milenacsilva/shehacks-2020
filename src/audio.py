@@ -14,7 +14,7 @@ def audio_interpreter(update, context):
     try:
         voice = context.bot.getFile(update.message.reply_to_message.voice)
     except:
-        update.message.reply_text("Não compreendi seu pedido, poderia repeti-lo?")
+        update.message.reply_text("Não compreendi seu pedido, poderia repetí-lo?")
         return ConversationHandler.END
 
     wav = convert_ogg_to_wav(voice)

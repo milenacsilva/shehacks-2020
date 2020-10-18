@@ -27,14 +27,14 @@ def register(update, context):
         text.append("Não se preocupe! Suas informações já estão cadastradas.🍕")
          
         text.append("Deseja mudar alguma informação? Digite /edit") 
-        "\n".join(text)
-        text.append("--->Endereço 🏡? Digite /endereco")
-        update.message.reply_text("\n".join(text))
-        text.append("--->Contatos favoritos 👩‍🦱👨‍🦱? Digite /contatos")
-        "\n".join(text)
-        text.append("--->CPF 1️⃣2️⃣3️⃣? Digite /cpf")
-        "\n".join(text)
-        text.append("--->E-mail 🗨? Digite /email")
+      #  "\n".join(text)
+       # text.append("--->Endereço 🏡? Digite /endereco")
+       # update.message.reply_text("\n".join(text))
+       # text.append("--->Contatos favoritos 👩‍🦱👨‍🦱? Digite /contatos")
+       # "\n".join(text)
+       # text.append("--->CPF 1️⃣2️⃣3️⃣? Digite /cpf")
+       # "\n".join(text)
+       # text.append("--->E-mail 🗨? Digite /email")
 
         return ConversationHandler.END
     
@@ -84,7 +84,7 @@ def get_help_contacts(update, context):
 
 def conclude_registration(update, context):
     ''' Finishs the registration conversation '''
-    update.message.reply_text("Agora estamos com você. Use os seguintes comandos quando precisar ser socorrido(a):")
+    update.message.reply_text("Agora estamos com você 🌺. Digite /menu para escolher o seu pedido.")
     
     # BOTAR A LISTA DE COMANDO AQ TODO
     
@@ -98,7 +98,7 @@ def edit(update, context):
         #ai mnada printar toda a mensagem de cadastro da def register
         return ConversationHandler.END
 
-    keyboard = [[InlineKeyboardButton("Cpf<- esses nomes aqui", callback_data='1'), # ANA TODO
+    keyboard = [[InlineKeyboardButton("CPF", callback_data='1'), # ANA TODO
                  InlineKeyboardButton("Email", callback_data='2'),
                  InlineKeyboardButton("Endereço", callback_data='3')],
                 [InlineKeyboardButton("Lista de Contatos", callback_data='4')]]
