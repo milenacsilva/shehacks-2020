@@ -26,7 +26,7 @@ def register(update, context):
     if not __register_user(update, context):
         text.append("Não se preocupe! Suas informções já estão cadastradas.🍕")
          
-        text.append("Deseja mudar alguma informação? Digite /editar") 
+        text.append("Deseja mudar alguma informação? Digite /edit") 
         "\n".join(text)
         text.append("--->Endereço 🏡? Digite /endereco")
         update.message.reply_text("\n".join(text))
