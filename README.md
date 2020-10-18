@@ -4,7 +4,7 @@
 Se passando de uma pizzaria comum, seu intuito é ser um botão de emergência escondido para que, dado um cenário de risco, uma comunicação indireta com contatos de segurança da vítima possa ser estabelecida
 
 # Instruções de Uso
-[Botar o link para o video aqui](linkparaovideo.com)
+[Link para o vídeo em construção](linkparaovideo.com)
 
 Para poder acessar o chat com o bot [clique aqui](https://t.me/PizzaHortaBot)
 
