@@ -25,7 +25,7 @@ def main():
     dp.add_handler(CallbackQueryHandler(query_handler))
     dp.add_handler(registration)
     dp.add_handler(get_help)
-    dp.add_handler(audio_interpreter)
+    #dp.add_handler(audio_interpreter)
     dp.add_handler(edit_info)
 
     updater.start_polling()
